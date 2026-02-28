@@ -1,0 +1,62 @@
+~/Tools/FAFO-Engine $ rm ~/storage/podcasts ~/storage/audiobooks && termux-setup-storage
+It appears that directory '~/storage' already exists.                        
+              This script is going to rebuild its structure from
+scratch, wiping all dangling files. The actual storage                       
+              content IS NOT going to be deleted.
+Do you want to continue? (y/n) y
+~/Tools/FAFO-Engine $ find "$HOME" -name "*.sh" -o -name "*.py" -o -name "*.js" ! -path "*/ArchiveSafe/*" ! -path "*/venv/*" ! -path "*/script_backups/*" -exec chmod +x {} +
+~/Tools/FAFO-Engine $ sed -i '266s/;;/;;
+                    ;;/' ~/Tools/FAFO-Engine/FAFO.sh
+/data/data/com.termux/files/usr/bin/sed: -e expression #1, char 10: unterminated `s' command
+~/Tools/FAFO-Engine $ echo 'find "$HOME" -name "*.sh" -o -name "*.py" -o -name "*.js" | xargs chmod +x' > ~/bin/fix_all_syntax.sh && chmod +x ~/bin/fix_all_syntax.sh
+~/Tools/FAFO-Engine $ find ~/Osint -name "test.sh" -exec sh -c 'sed -i "s/^else/ fi
+else/" {}' {} +
+find: Only one instance of {} is supported with -exec ... +
+~/Tools/FAFO-Engine $ rm -f ~/misc/grand_inspection_* ~/grand_inspection_*
+~/Tools/FAFO-Engine $ cp -r ~/Tools/FAFO-Engine ~/Tools/FAFO-Engine_working
+~/Tools/FAFO-Engine $ cd ~/Tools/FAFO-Engine_working && ./fafo-audit.sh
+🕵️  Starting Global Audit of /data/data/com.termux/files/home...
+------------------------------------------------
+[1/4] Fixing Permissions and Termux shebangs...
+✅ Permissions & Shebangs synchronized.
+
+[2/4] Searching for broken symlinks...
+⚠️  Broken links found:
+/data/data/com.termux/files/home/storage/podcasts
+/data/data/com.termux/files/home/storage/audiobooks
+💡 Suggestion: Delete them with 'rm' and recreate them.
+
+[3/4] Auditing scripts/configs for hardcoded home paths...
+/data/data/com.termux/files/home/.config/yt-dlp/config
+/data/data/com.termux/files/home/Osint/osint_safe/cloudflare_intel/logs/cf_intel.log
+/data/data/com.termux/files/home/Osint/osint_safe/cloudflare_intel/logs/cf_intel.log.bak_first_run
+/data/data/com.termux/files/home/Osint/osint_safe/cloudflare_intel/403jump_results/20260107_162301/403jump.log
+/data/data/com.termux/files/home/Osint/osint_safe/cloudflare_intel/403jump_reprocess_results/20260107_162301/403jump.log
+/data/data/com.termux/files/home/.bash_history
+/data/data/com.termux/files/home/Tools/FAFO-Engine/grand_inspection_20260227_0641.log
+/data/data/com.termux/files/home/Tools/FAFO-Engine_working/grand_inspection_20260227_0641.log
+/data/data/com.termux/files/home/launcher_scripts/pip-social-analyzer/stderr.log
+/data/data/com.termux/files/home/FAFO/fafo_localhost.csv
+/data/data/com.termux/files/home/.npm/_logs/2026-01-18T10_47_55_019Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2026-01-21T17_35_02_551Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2026-02-09T01_08_15_636Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2026-02-09T01_08_35_495Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2025-12-22T06_17_11_425Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2025-12-22T06_17_13_614Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2025-12-22T06_46_50_180Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2025-12-22T06_47_06_016Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2025-12-22T06_47_06_915Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2026-01-18T10_45_25_325Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2026-01-18T10_46_59_060Z-debug-0.log
+/data/data/com.termux/files/home/.cpan/CPAN/MyConfig.pm
+/data/data/com.termux/files/home/syntax_errors.log
+/data/data/com.termux/files/home/misc/report_20260225_0808.txt
+/data/data/com.termux/files/home/misc/termux_report.txt
+Paths needing review saved to: /data/data/com.termux/files/home/files_to_fix.txt
+
+[4/4] Checking for empty scripts...
+
+------------------------------------------------
+✨ Audit Complete!
+Run: cat /data/data/com.termux/files/home/files_to_fix.txt | ~/bin/fix_paths.sh
+~/Tools/FAFO-Engine_working $

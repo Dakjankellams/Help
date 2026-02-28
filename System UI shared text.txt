@@ -1,0 +1,763 @@
+nano ~/bin/activate_osint
+
+#!/data/data/com.termux/files/usr/bin/bash
+
+echo "Scanning for virtual environments... (this may take a moment)"
+
+# Find any folder containing bin/activate
+mapfile -t VENVS < <(find ~ -type f -name "activate" -path "*/bin/activate" 2>/dev/null | sed 's/\/bin\/activate//')
+
+if [ ${#VENVS[@]} -eq 0 ]; then
+    echo "No virtual environments found."
+    exit 1
+fi
+
+echo
+echo "Detected virtual environments:"
+i=1
+for v in "${VENVS[@]}"; do
+    echo "  $i) $v"
+    i=$((i+1))
+done
+
+echo
+read -p "Select venv number to activate: " choice
+
+index=$((choice-1))
+SELECTED="${VENVS[$index]}"
+
+if [ -f "$SELECTED/bin/activate" ]; then
+    echo "Activating: $SELECTED"
+    source "$SELECTED/bin/activate"
+else
+    echo "Error: $SELECTED/bin/activate not found"
+fi
+
+
+
+chmod +x ~/bin/activate_osint
+
+activate_osint
+activate_osint
+
+nano ~/bin/run_osint
+
+#!/data/data/com.termux/files/usr/bin/bash
+
+TOOL="$1"
+TARGET="$2"
+
+if [ -z "$TOOL" ] || [ -z "$TARGET" ]; then
+    echo "Usage: run_osint <tool> <target>"
+    exit 1
+fi
+
+# Search for tool binary
+TOOL_PATH=$(find ~ -type f -name "$TOOL" -path "*/bin/$TOOL" 2>/dev/null | head -n 1)
+
+if [ -z "$TOOL_PATH" ]; then
+    echo "Tool '$TOOL' not found."
+    exit 1
+fi
+
+# Extract venv path
+VENV_PATH=$(dirname "$(dirname "$TOOL_PATH")")
+
+if [ ! -f "$VENV_PATH/bin/activate" ]; then
+    echo "Venv activation script not found at $VENV_PATH"
+    exit 1
+fi
+
+echo "Activating venv: $VENV_PATH"
+source "$VENV_PATH/bin/activate"
+
+echo "Running: $TOOL $TARGET"
+"$TOOL" "$TARGET"
+
+deactivate 2>/dev/null
+
+chmod +x ~/bin/run_osint
+
+run_osint holehe janellvictoria17@gmail.com
+run_osint maigret pb6661996@gmail.com
+run_osint ghunt satansploodge666@gmail.com
+
+
+nano ~/bin/osint_launcher
+
+#!/data/data/com.termux/files/usr/bin/bash
+
+# ============================
+#  INPUT HANDLING
+# ============================
+
+TARGET="$1"
+
+if [ -z "$TARGET" ]; then
+    echo "Usage: osint_launcher <target>"
+    exit 1
+fi
+
+# ============================
+#  INPUT TYPE DETECTION
+# ============================
+
+detect_type() {
+    if [[ "$TARGET" =~ @ ]]; then
+        echo "email"
+    elif [[ "$TARGET" =~ ^[0-9+\-]+$ ]]; then
+        echo "phone"
+    elif [[ "$TARGET" =~ \. ]]; then
+        echo "domain"
+    else
+        echo "unknown"
+    fi
+}
+
+TYPE=$(detect_type)
+
+echo "Detected input type: $TYPE"
+
+# ============================
+#  AUTO-DETECT VENV
+# ============================
+
+activate_correct_venv() {
+    echo "Scanning for virtual environments..."
+
+    mapfile -t VENVS < <(find ~ -type f -name "activate" -path "*/bin/activate" 2>/dev/null | sed 's/\/bin\/activate//')
+
+    if [ ${#VENVS[@]} -eq 0 ]; then
+        echo "No virtual environments found."
+        return
+    fi
+
+    echo "Available venvs:"
+    i=1
+    for v in "${VENVS[@]}"; do
+        echo "  $i) $v"
+        i=$((i+1))
+    done
+
+    echo
+    read -p "Select venv number to activate: " choice
+    index=$((choice-1))
+    SELECTED="${VENVS[$index]}"
+
+    if [ -f "$SELECTED/bin/activate" ]; then
+        echo "Activating: $SELECTED"
+        source "$SELECTED/bin/activate"
+    else
+        echo "Error: $SELECTED/bin/activate not found"
+    fi
+}
+
+# ============================
+#  MODULE ROUTING
+# ============================
+
+run_email_tools() {
+    echo "[email_tools] Placeholder — add your email-related commands here."
+}
+
+run_phone_tools() {
+    echo "[phone_tools] Placeholder — add your phone-related commands here."
+}
+
+run_domain_tools() {
+    echo "[domain_tools] Placeholder — add your domain-related commands here."
+}
+
+run_cloudflare_tools() {
+    echo "[cloudflare_tools] Placeholder — add your Cloudflare commands here."
+}
+
+run_sync_tools() {
+    echo "[sync_tools] Placeholder — add your sync commands here."
+}
+
+run_logging_tools() {
+    echo "[logging_tools] Placeholder — add your logging commands here."
+}
+
+# ============================
+#  MAIN ROUTER
+# ============================
+
+activate_correct_venv
+
+case "$TYPE" in
+    email)
+        run_email_tools
+        ;;
+    phone)
+        run_phone_tools
+        ;;
+    domain)
+        run_domain_tools
+        run_cloudflare_tools
+        ;;
+    *)
+        echo "Unknown input type — no module assigned."
+        ;;
+esac
+
+run_logging_tools
+run_sync_tools
+
+echo "Workflow complete."
+
+chmod +x ~/bin/osint_launcher
+
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+osint_launcher something@example.com
+osint_launcher 18125823032
+osint_launcher fafo.click
+
+run_email_tools() {
+    echo "[email_tools] Running email analysis..."
+    # your commands here
+}
+sed -e '1h;2,$H;$!d;g' -e 's/.*/#!/data\/data\/com.termux\/files\/usr\/bin\/bash\n\n# Unified OSINT Framework (Safe + Modular)\n\nTARGET="$1"\n\nif [ -z "$TARGET" ]; then\n    echo "Usage: osint_launcher <target>"\n    exit 1\nfi\n\n# Input type detection\n\ndetect_type() {\n    if [[ "$TARGET" =~ @ ]]; then\n        echo "email"\n    elif [[ "$TARGET" =~ ^[0-9+\\-]+$ ]]; then\n        echo "phone"\n    elif [[ "$TARGET" =~ \\. ]]; then\n        echo "domain"\n    else\n        echo "unknown"\n    fi\n}\n\nTYPE=$(detect_type)\n\necho \"Detected input type: $TYPE\"\n\n# Auto-detect venv\n\nactivate_correct_venv() {\n    echo \"Scanning for virtual environments...\"\n\n    mapfile -t VENVS < <(find ~ -type f -name \"activate\" -path \"*/bin/activate\" 2>/dev/null | sed \"s/\\/bin\\/activate//\")\n\n    if [ ${#VENVS[@]} -eq 0 ]; then\n        echo \"No virtual environments found.\"\n        return\n    fi\n\n    echo \"Available venvs:\"\n    i=1\n    for v in \"${VENVS[@]}\"; do\n        echo \"  $i) $v\"\n        i=$((i+1))\n    done\n\n    echo\n    read -p \"Select venv number to activate: \" choice\n    index=$((choice-1))\n    SELECTED=\"${VENVS[$index]}\"\n\n    if [ -f \"$SELECTED/bin/activate\" ]; then\n        echo \"Activating: $SELECTED\"\n        source \"$SELECTED/bin/activate\"\n    else\n        echo \"Error: $SELECTED/bin/activate not found\"\n    fi\n}\n\n# Module placeholders\n\nrun_email_tools() {\n    echo \"[email_tools] Placeholder — add your email-related commands here.\"\n}\n\nrun_phone_tools() {\
+
+
+mkdir -p ~/osint_framework/modules
+mkdir -p ~/osint_framework/logs
+mkdir -p ~/osint_framework/results
+
+osint_framework/
+    modules/
+    logs/
+    results/
+
+echo '# email_tools module' > ~/osint_framework/modules/email_tools.sh
+echo '# phone_tools module' > ~/osint_framework/modules/phone_tools.sh
+echo '# domain_tools module' > ~/osint_framework/modules/domain_tools.sh
+echo '# cloudflare_tools module' > ~/osint_framework/modules/cloudflare_tools.sh
+echo '# sync_tools module' > ~/osint_framework/modules/sync_tools.sh
+echo '# logging_tools module' > ~/osint_framework/modules/logging_tools.sh
+
+MODULE_DIR="$HOME/osint_framework/modules"
+
+load_module() {
+    MODULE_FILE="$MODULE_DIR/$1.sh"
+    if [ -f "$MODULE_FILE" ]; then
+        source "$MODULE_FILE"
+    else
+        echo "Module $1 not found."
+    fi
+}
+
+
+
+
+load_module email_tools
+load_module phone_tools
+load_module domain_tools
+load_module cloudflare_tools
+load_module sync_tools
+load_module logging_tools
+
+osint_launcher target_her
+
+~/osint_framework/
+    modules/
+        email_tools.sh
+        phone_tools.sh
+        domain_tools.sh
+        cloudflare_tools.sh
+        sync_tools.sh
+        logging_tools.sh
+    logs/
+    results/
+~/bin/osint_launcher
+
+mkdir -p ~/osint_framework/modules ~/osint_framework/logs ~/osint_framework/results
+
+sed '1s/.*/# email_tools module placeholder\n# add your email-related commands here/' \
+    > ~/osint_framework/modules/email_tools.sh
+
+sed '1s/.*/# phone_tools module placeholder\n# add your phone-related commands here/' \
+    > ~/osint_framework/modules/phone_tools.sh
+
+sed '1s/.*/# domain_tools module placeholder\n# add your domain-related commands here/' \
+    > ~/osint_framework/modules/domain_tools.sh
+
+sed '1s/.*/# cloudflare_tools module placeholder\n# add your Cloudflare-related commands here/' \
+    > ~/osint_framework/modules/cloudflare_tools.sh
+
+sed '1s/.*/# sync_tools module placeholder\n# add your sync-related commands here/' \
+    > ~/osint_framework/modules/sync_tools.sh
+
+sed '1s/.*/# logging_tools module placeholder\n# add your logging-related commands here/' \
+    > ~/osint_framework/modules/logging_tools.sh
+
+
+
+sed -e '1h;2,$H;$!d;g' -e 's/.*/#!/data\/data\/com.termux\/files\/usr\/bin\/bash\n\nMODULE_DIR="$HOME\/osint_framework\/modules"\n\nTARGET="$1"\n\nif [ -z "$TARGET" ]; then\n    echo "Usage: osint_launcher <target>"\n    exit 1\nfi\n\n# Input type detection\ndetect_type() {\n    if [[ "$TARGET" =~ @ ]]; then\n        echo "email"\n    elif [[ "$TARGET" =~ ^[0-9+\\-]+$ ]]; then\n        echo "phone"\n    elif [[ "$TARGET" =~ \\. ]]; then\n        echo "domain"\n    else\n        echo "unknown"\n    fi\n}\n\nTYPE=$(detect_type)\necho "Detected input type: $TYPE"\n\n# Auto-detect venv\nactivate_correct_venv() {\n    echo "Scanning for virtual environments..."\n    mapfile -t VENVS < <(find ~ -type f -name "activate" -path "*/bin/activate" 2>\/dev\/null | sed "s\/\\/bin\\/activate\/\/")\n    if [ ${#VENVS[@]} -eq 0 ]; then\n        echo "No virtual environments found."\n        return\n    fi\n    echo "Available venvs:"\n    i=1\n    for v in "${VENVS[@]}"; do\n        echo "  $i) $v"\n        i=$((i+1))\n    done\n    echo\n    read -p "Select venv number to activate: " choice\n    index=$((choice-1))\n    SELECTED="${VENVS[$index]}"\n    if [ -f "$SELECTED\/bin\/activate" ]; then\n        echo "Activating: $SELECTED"\n        source "$SELECTED\/bin\/activate"\n    else\n        echo "Error: $SELECTED\/bin\/activate not found"\n    fi\n}\n\n# Dynamic module loader\nload_module() {\n    MODULE_FILE="$MODULE_DIR\/$1.sh"\n    if [ -f "$MODULE_FILE" ]; then\n        source "$MODULE_FILE"\n    else\n        echo "Module $1 not found."\n    fi\n}\n\n# Main router\nactivate_correct_venv\n\ncase "$TYPE" in\n    email)\n        load_module email_tools\n        ;;\n    phone)\n        load_module phone_tools\n        ;;\n    domain)\n        load_module domain_tools\n        load_module cloudflare_tools\n        ;;\n    *)\n        echo "Unknown input type — no module assigned."\n        ;;\nesac\n\nload_module logging_tools\nload_module sync_tools\n\necho "Workflow complete."/' \
+> ~/bin/osint_launcher && chmod +x ~/bin/osint_launcher
+
+
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+~/osint_framework/
+    modules/
+        email_tools.sh
+        phone_tools.sh
+        domain_tools.sh
+        cloudflare_tools.sh
+        sync_tools.sh
+        logging_tools.sh
+    logs/
+    results/
+~/bin/osint_launcher
+
+osint_launcher <target>
+
+~/osint_framework/modules/
+
+nano ~/osint_framework/modules/help_menu.sh
+
+sed '1s/.*/# help_menu module placeholder\nhelp_menu() {\n    echo "OSINT Launcher Help"\n    echo "---------------------"\n    echo "Usage: osint_launcher <target>"\n    echo "Modules:"\n    echo "  email_tools      - placeholder for email workflows"\n    echo "  phone_tools      - placeholder for phone workflows"\n    echo "  domain_tools     - placeholder for domain workflows"\n    echo "  cloudflare_tools - placeholder for Cloudflare workflows"\n    echo "  sync_tools       - placeholder for sync workflows"\n    echo "  logging_tools    - placeholder for logging workflows"\n    echo "  help_menu        - show this help menu"\n}\n/' \
+> ~/osint_framework/modules/help_menu.sh
+
+~/osint_framework/modules/sync_tools.sh
+
+sed '1s/.*/# sync_tools module placeholder\nsync_tools() {\n    echo "[sync_tools] Placeholder — add your sync logic here."\n    echo "[sync_tools] Example: rsync, termux-storage, cloud sync, etc."\n}\n/' \
+> ~/osint_framework/modules/sync_tools.sh
+
+
+
+sed -i 's/case "\$TYPE" in/case "$TARGET" in\n    help|--help)\n        load_module help_menu\n        help_menu\n        exit 0\n        ;;\n    *)\n        ;;\nesac\n\ncase "$TYPE" in/' ~/bin/osint_launcher
+
+sed -i 's/load_module logging_tools/load_module help_menu\nload_module logging_tools/' ~/bin/osint_launcher
+
+email_tools.sh
+phone_tools.sh
+domain_tools.sh
+cloudflare_tools.sh
+sync_tools.sh
+logging_tools.sh
+help_menu.sh
+
+logs/
+results/
+modules/
+
+~/bin/osint_launcher
+
+osint_launcher <target>
+osint_launcher help
+osint_launcher --help
+
+sed '1s/.*/# help_menu module\nhelp_menu() {\n    echo "OSINT Launcher Help"\n    echo "====================="\n    echo\n    echo "Usage:"\n    echo "  osint_launcher <target>"\n    echo "  osint_launcher help"\n    echo "  osint_launcher --help"\n    echo\n    echo "Modules Loaded:"\n    echo "  email_tools      - user-defined email workflows"\n    echo "  phone_tools      - user-defined phone workflows"\n    echo "  domain_tools     - user-defined domain workflows"\n    echo "  cloudflare_tools - user-defined Cloudflare workflows"\n    echo "  sync_tools       - file sync + device sync"\n    echo "  logging_tools    - timestamped logs + results"\n    echo "  help_menu        - this help menu"\n    echo\n    echo "Framework Structure:"\n    echo "  ~/osint_framework/modules/"\n    echo "  ~/osint_framework/logs/"\n    echo "  ~/osint_framework/results/"\n    echo\n    echo "This help menu is safe and contains no scanning logic."\n}\n/' \
+> ~/osint_framework/modules/help_menu.sh
+
+THAT WAS HELP MENU START 
+
+sed '1s/.*/# sync_tools module\nsync_tools() {\n    echo "[sync_tools] Starting sync engine..."\n\n    SYNC_SRC=\"$HOME/osint_framework/results\"\n    SYNC_DST=\"$HOME/osint_framework/sync_out\"\n\n    mkdir -p \"$SYNC_DST\"\n\n    echo "[sync_tools] Copying new results to sync_out..."\n    cp -r \"$SYNC_SRC\"/* \"$SYNC_DST\" 2>/dev/null\n\n    echo "[sync_tools] Local sync complete."\n    echo "[sync_tools] If you want cross-device sync, copy sync_out to your second phone manually or via cloud storage."\n}\n/' \
+> ~/osint_framework/modules/sync_tools.sh
+
+sed '1s/.*/# logging_tools module\nlogging_tools() {\n    TS=$(date +%Y-%m-%d_%H-%M-%S)\n    OUTDIR=\"$HOME/osint_framework/results/$TS\"\n    mkdir -p \"$OUTDIR\"\n\n    echo \"[logging_tools] Created results directory: $OUTDIR\"\n    echo \"[logging_tools] You can save your module output into this folder.\"\n}\n/' \
+> ~/osint_framework/modules/logging_tools.sh
+
+sed -i 's/load_module logging_tools/load_module help_menu\nload_module logging_tools/' ~/bin/osint_launcher
+
+sed -i 's/case "\$TYPE" in/case "$TARGET" in\n    help|--help)\n        load_module help_menu\n        help_menu\n        exit 0\n        ;;\n    *)\n        ;;\nesac\n\ncase "$TYPE" in/' ~/bin/osint_launcher
+
+sed "1s/.*/# <module_name> module\n<module_name>() {\n    echo \"[<module_name>] Module loaded. Add your logic here.\"\n}\n/" \
+> ~/osint_framework/modules/<module_name>.sh
+
+create a module called tools_extra
+
+sed "1s/.*/# tools_extra module\ntools_extra() {\n    echo \"[tools_extra] Module loaded. Add your logic here.\"\n}\n/" \
+> ~/osint_framework/modules/tools_extra.sh
+
+load_module tools_extra
+
+sed -i '/load_module logging_tools/a load_module tools_extra' ~/bin/osint_launcher
+
+sed -i '/load_module logging_tools/a load_module tools_extra' ~/bin/osint_launcher
+
+sed '1s/.*/# <module_name> module\n<module_name>_init() {\n    echo "[<module_name>] init called."\n}\n\n<module_name>_run() {\n    echo "[<module_name>] run called."\n}\n\n<module_name>_cleanup() {\n    echo "[<module_name>] cleanup called."\n}\n/' \
+> ~/osint_framework/modules/<module_name>.sh
+
+sed -i '/load_module domain_tools/a \ \ \ \ load_module tools_extra' ~/bin/osint_launcher
+
+sed -i '/load_module sync_tools/i load_module tools_extra' ~/bin/osint_launcher
+
+osint_launcher tools_extra
+
+sed -i 's/case "\$TARGET" in/case "$TARGET" in\n    tools_extra)\n        load_module tools_extra\n        tools_extra\n        exit 0\n        ;;\n    *)\n        ;;\nesac\n\ncase "$TYPE" in/' ~/bin/osint_launcher
+
+create_module <name>
+
+mkdir -p ~/osint_framework/modules/{core,email,phone,domain,cloudflare,sync,logging,misc}
+
+sed -i '/load_module() {/,/^}/c\load_module() {\n    MODULE_FILE=\"$MODULE_DIR\/$1.sh\"\n    if [ -f \"$MODULE_FILE\" ]; then\n        source \"$MODULE_FILE\"\n        return\n    fi\n\n    FOUND=$(find \"$MODULE_DIR\" -maxdepth 2 -type f -name \"$1.sh\" 2>\/dev\/null | head -n 1)\n    if [ -n \"$FOUND\" ]; then\n        echo \"[loader] Loaded module: $FOUND\"\n        source \"$FOUND\"\n    else\n        echo \"[loader] Module $1 not found in $MODULE_DIR or subdirectories.\"\n    fi\n}\n' ~/bin/osint_launcher
+
+sed -i '/TARGET="\$1"/a EXTRA_ARGS="${@:2}"' ~/bin/osint_launcher
+
+sed '1s/.*/#!\/data\/data\/com.termux\/files\/usr\/bin\/bash\n\nMODULE_ROOT="$HOME\/osint_framework\/modules"\n\nusage() {\n    echo "Usage: osint_module_gen <name> [category]"\n    echo "  name     - module name (no .sh)"\n    echo "  category - optional: core, email, phone, domain, cloudflare, sync, logging, misc (default: misc)"\n}\n\nNAME="$1"\nCATEGORY="$2"\n\nif [ -z "$NAME" ]; then\n    usage\n    exit 1\nfi\n\nif [ -z "$CATEGORY" ]; then\n    CATEGORY="misc"\nfi\n\nTARGET_DIR="$MODULE_ROOT\/$CATEGORY"\nMODULE_PATH="$TARGET_DIR\/$NAME.sh"\n\nmkdir -p "$TARGET_DIR"\n\nif [ -f "$MODULE_PATH" ]; then\n    echo "[osint_module_gen] Module already exists: $MODULE_PATH"\n    exit 1\nfi\n\ncat > "$MODULE_PATH" <<EOF\n# $NAME module ($CATEGORY category)\n\n${NAME}_init() {\n    echo \"[$NAME] init called.\"\n}\n\n${NAME}_run() {\n    echo \"[$NAME] run called. Add your logic here.\"\n}\n\n${NAME}_cleanup() {\n    echo \"[$NAME] cleanup called.\"\n}\nEOF\n\nchmod +x "$MODULE_PATH"\n\necho "[osint_module_gen] Created module: $MODULE_PATH"\n' \
+> ~/bin/osint_module_gen && chmod +x ~/bin/osint_module_gen
+
+osint_launcher new_module reports logging
+
+sed -i 's/    help|--help)/    new_module)\n        osint_module_gen $EXTRA_ARGS\n        exit 0\n        ;;\n    help|--help)/' ~/bin/osint_launcher
+
+sed '1s/.*/# help_menu module\nhelp_menu() {\n    echo "OSINT Launcher Help"\n    echo "====================="\n    echo\n    echo "Usage:"\n    echo "  osint_launcher <target>"\n    echo "  osint_launcher help"\n    echo "  osint_launcher --help"\n    echo "  osint_launcher new_module <name> [category]"\n    echo\n    echo "Subcommands:"\n    echo "  help, --help         - show this help menu"\n    echo "  new_module <n> [cat] - create a new module via osint_module_gen"\n    echo\n    echo "Module categories (directories):"\n    echo "  core        - core framework modules"\n    echo "  email       - email-related workflows"\n    echo "  phone       - phone-related workflows"\n    echo "  domain      - domain-related workflows"\n    echo "  cloudflare  - Cloudflare-related workflows"\n    echo "  sync        - sync and export workflows"\n    echo "  logging     - logging and results workflows"\n    echo "  misc        - uncategorized or experimental modules"\n    echo\n    echo "Framework structure:"\n    echo "  ~/osint_framework/modules/       - modules (with category subfolders)"\n    echo "  ~/osint_framework/logs/          - logs (if you add logging there)"\n    echo "  ~/osint_framework/results/       - timestamped results folders"\n    echo\n    echo "Module generator (osint_module_gen):"\n    echo "  osint_module_gen <name> [category]"\n    echo "    - creates a new module file with init/run/cleanup functions"\n    echo "    - places it under the chosen category subdirectory"\n    echo "    - example: osint_module_gen reports logging"\n    echo\n    echo "Notes:"\n    echo "  - Modules are loaded via load_module <name>."\n    echo "  - The loader searches both modules/ and its category subfolders."\n}\n/' \
+> ~/osint_framework/modules/help_menu.sh
+
+osint_module_gen reports logging
+
+osint_launcher new_module reports logging
+
+osint_launcher help
+
+mkdir -p ~/osint_framework/modules/{core,email,phone,domain,cloudflare,sync,logging,misc}
+
+sed -i '/load_module() {/,/^}/c\load_module() {\n    MODULE_FILE="$MODULE_DIR/$1.sh"\n    if [ -f "$MODULE_FILE" ]; then\n        source "$MODULE_FILE"\n        return\n    fi\n\n    FOUND=$(find "$MODULE_DIR" -maxdepth 2 -type f -name "$1.sh" 2>/dev/null | head -n 1)\n    if [ -n "$FOUND" ]; then\n        echo "[loader] Loaded module: $FOUND"\n        source "$FOUND"\n    else\n        echo "[loader] Module $1 not found."\n    fi\n}\n' ~/bin/osint_launcher
+
+osint_launcher new_module reports logging
+
+~/bin/osint_module_gen
+
+osint_module_gen <name> [category]
+
+sed '1s/.*/#!\/data\/data\/com.termux\/files\/usr\/bin\/bash\n\nMODULE_ROOT="$HOME\/osint_framework\/modules"\n\nusage() {\n    echo "Usage: osint_module_gen <name> [category]"\n    echo "  name     - module name (no .sh)"\n    echo "  category - optional: core, email, phone, domain, cloudflare, sync, logging, misc (default: misc)"\n}\n\nNAME="$1"\nCATEGORY="$2"\n\nif [ -z "$NAME" ]; then\n    usage\n    exit 1\nfi\n\nif [ -z "$CATEGORY" ]; then\n    CATEGORY="misc"\nfi\n\nTARGET_DIR="$MODULE_ROOT\/$CATEGORY"\nMODULE_PATH="$TARGET_DIR\/$NAME.sh"\n\nmkdir -p "$TARGET_DIR"\n\nif [ -f "$MODULE_PATH" ]; then\n    echo "[osint_module_gen] Module already exists: $MODULE_PATH"\n    exit 1\nfi\n\ncat > "$MODULE_PATH" <<EOF\n# $NAME module ($CATEGORY category)\n\n${NAME}_init() {\n    echo \"[$NAME] init called.\"\n}\n\n${NAME}_run() {\n    echo \"[$NAME] run called. Add your logic here.\"\n}\n\n${NAME}_cleanup() {\n    echo \"[$NAME] cleanup called.\"\n}\nEOF\n\nchmod +x "$MODULE_PATH"\n\necho "[osint_module_gen] Created module: $MODULE_PATH"\n' \
+> ~/bin/osint_module_gen && chmod +x ~/bin/osint_module_gen
+
+osint_launcher new_module <name> [category]
+
+sed -i 's/    help|--help)/    new_module)\n        osint_module_gen $EXTRA_ARGS\n        exit 0\n        ;;\n    help|--help)/' ~/bin/osint_launcher
+
+sed '1s/.*/# help_menu module\nhelp_menu() {\n    echo "OSINT Launcher Help"\n    echo "====================="\n    echo\n    echo "Usage:"\n    echo "  osint_launcher <target>"\n    echo "  osint_launcher help"\n    echo "  osint_launcher --help"\n    echo "  osint_launcher new_module <name> [category]"\n    echo\n    echo "Subcommands:"\n    echo "  help, --help         - show this help menu"\n    echo "  new_module <n> [cat] - create a new module via osint_module_gen"\n    echo\n    echo "Module categories:"\n    echo "  core        - core framework modules"\n    echo "  email       - email workflows"\n    echo "  phone       - phone workflows"\n    echo "  domain      - domain workflows"\n    echo "  cloudflare  - Cloudflare workflows"\n    echo "  sync        - sync/export workflows"\n    echo "  logging     - logging/results workflows"\n    echo "  misc        - uncategorized modules"\n    echo\n    echo "Framework structure:"\n    echo "  ~/osint_framework/modules/       - modules (with category subfolders)"\n    echo "  ~/osint_framework/logs/          - logs"\n    echo "  ~/osint_framework/results/       - timestamped results"\n    echo\n    echo "Module generator:"\n    echo "  osint_module_gen <name> [category]"\n    echo "    - creates a new module with init/run/cleanup functions"\n    echo "    - places it in the correct category folder"\n    echo "    - example: osint_module_gen reports logging"\n    echo\n    echo "Notes:"\n    echo "  - Modules are loaded via load_module <name>."\n    echo "  - Loader searches modules/ and all category subfolders."\n}\n/' \
+> ~/osint_framework/modules/help_menu.sh
+
+sed -i '/load_module logging_tools/i load_module help_menu' ~/bin/osint_launcher
+
+osint_module_gen reports logging
+osint_launcher new_module reports logging
+modules/logging/reports.sh
+load_module reports
+osint_launcher help
+
+nano 
+~/bin/osint_launcher
+
+
+#!/data/data/com.termux/files/usr/bin/bash
+
+MODULE_DIR="$HOME/osint_framework/modules"
+
+TARGET="$1"
+EXTRA_ARGS="${@:2}"
+
+if [ -z "$TARGET" ]; then
+    echo "Usage: osint_launcher <target|command> [args...]"
+    exit 1
+fi
+
+# Input type detection
+detect_type() {
+    if [[ "$TARGET" =~ @ ]]; then
+        echo "email"
+    elif [[ "$TARGET" =~ ^[0-9+\-]+$ ]]; then
+        echo "phone"
+    elif [[ "$TARGET" =~ \. ]]; then
+        echo "domain"
+    else
+        echo "unknown"
+    fi
+}
+
+TYPE=$(detect_type)
+echo "Detected input type: $TYPE"
+
+# Auto-detect venv (simple, interactive)
+activate_correct_venv() {
+    echo "Scanning for virtual environments..."
+    mapfile -t VENVS < <(find ~ -type f -name "activate" -path "*/bin/activate" 2>/dev/null | sed 's/\/bin\/activate//')
+    if [ ${#VENVS[@]} -eq 0 ]; then
+        echo "No virtual environments found."
+        return
+    fi
+    echo "Available venvs:"
+    i=1
+    for v in "${VENVS[@]}"; do
+        echo "  $i) $v"
+        i=$((i+1))
+    done
+    echo
+    read -p "Select venv number to activate: " choice
+    index=$((choice-1))
+    SELECTED="${VENVS[$index]}"
+    if [ -f "$SELECTED/bin/activate" ]; then
+        echo "Activating: $SELECTED"
+        # shellcheck disable=SC1090
+        source "$SELECTED/bin/activate"
+    else
+        echo "Error: $SELECTED/bin/activate not found"
+    fi
+}
+
+# Dynamic module loader with category support
+load_module() {
+    MODULE_FILE="$MODULE_DIR/$1.sh"
+    if [ -f "$MODULE_FILE" ]; then
+        # shellcheck disable=SC1090
+        source "$MODULE_FILE"
+        return
+    fi
+
+    FOUND=$(find "$MODULE_DIR" -maxdepth 2 -type f -name "$1.sh" 2>/dev/null | head -n 1)
+    if [ -n "$FOUND" ]; then
+        echo "[loader] Loaded module: $FOUND"
+        # shellcheck disable=SC1090
+        source "$FOUND"
+    else
+        echo "[loader] Module $1 not found in $MODULE_DIR or subdirectories."
+    fi
+}
+
+# First, handle special commands (launcher-level)
+case "$TARGET" in
+    help|--help)
+        load_module help_menu
+        help_menu
+        exit 0
+        ;;
+    new_module)
+        # pass EXTRA_ARGS to generator: <name> [category]
+        if command -v osint_module_gen >/dev/null 2>&1; then
+            osint_module_gen $EXTRA_ARGS
+        else
+            echo "osint_module_gen not found in PATH."
+        fi
+        exit 0
+        ;;
+    *)
+        ;;
+esac
+
+# Optionally activate a venv
+activate_correct_venv
+
+# Type-based routing
+case "$TYPE" in
+    email)
+        load_module email_tools
+        # Optionally call a function like: email_tools_run "$TARGET"
+        ;;
+    phone)
+        load_module phone_tools
+        ;;
+    domain)
+        load_module domain_tools
+        load_module cloudflare_tools
+        ;;
+    *)
+        echo "Unknown input type — no type-specific module assigned."
+        ;;
+esac
+
+# Common modules (always loaded if present)
+load_module help_menu
+load_module logging_tools
+load_module sync_tools
+
+# You can optionally add calls like:
+# logging_tools
+# sync_tools
+
+echo "Workflow complete."
+
+mkdir -p ~/bin
+
+chmod +x ~/bin/osint_launcher
+
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+mkdir -p ~/osint_framework/modules/{core,email,phone,domain,cloudflare,sync,logging,misc}
+mkdir -p ~/osint_framework/logs ~/osint_framework/results
+
+nano ~/bin/osint_module_gen
+
+#!/data/data/com.termux/files/usr/bin/bash
+
+MODULE_ROOT="$HOME/osint_framework/modules"
+
+usage() {
+    echo "Usage: osint_module_gen <name> [category]"
+    echo "  name     - module name (no .sh)"
+    echo "  category - optional: core, email, phone, domain, cloudflare, sync, logging, misc (default: misc)"
+}
+
+NAME="$1"
+CATEGORY="$2"
+
+if [ -z "$NAME" ]; then
+    usage
+    exit 1
+fi
+
+if [ -z "$CATEGORY" ]; then
+    CATEGORY="misc"
+fi
+
+TARGET_DIR="$MODULE_ROOT/$CATEGORY"
+MODULE_PATH="$TARGET_DIR/$NAME.sh"
+
+mkdir -p "$TARGET_DIR"
+
+if [ -f "$MODULE_PATH" ]; then
+    echo "[osint_module_gen] Module already exists: $MODULE_PATH"
+    exit 1
+fi
+
+cat > "$MODULE_PATH" <<EOF
+# $NAME module ($CATEGORY category)
+
+${NAME}_init() {
+    echo "[$NAME] init called."
+}
+
+${NAME}_run() {
+    echo "[$NAME] run called. Add your logic here."
+}
+
+${NAME}_cleanup() {
+    echo "[$NAME] cleanup called."
+}
+EOF
+
+chmod +x "$MODULE_PATH"
+
+echo "[osint_module_gen] Created module: $MODULE_PATH"
+
+load_module reports
+reports_run
+
+~/osint_framework/modules/help_menu.sh
+
+# help_menu module
+help_menu() {
+    echo "OSINT Launcher Help"
+    echo "====================="
+    echo
+    echo "Usage:"
+    echo "  osint_launcher <target>"
+    echo "  osint_launcher help"
+    echo "  osint_launcher --help"
+    echo "  osint_launcher new_module <name> [category]"
+    echo
+    echo "Subcommands:"
+    echo "  help, --help         - show this help menu"
+    echo "  new_module <n> [cat] - create a new module via osint_module_gen"
+    echo
+    echo "Module categories (directories):"
+    echo "  core        - core framework modules"
+    echo "  email       - email-related workflows"
+    echo "  phone       - phone-related workflows"
+    echo "  domain      - domain-related workflows"
+    echo "  cloudflare  - Cloudflare-related workflows"
+    echo "  sync        - sync and export workflows"
+    echo "  logging     - logging and results workflows"
+    echo "  misc        - uncategorized or experimental modules"
+    echo
+    echo "Framework structure:"
+    echo "  ~/osint_framework/modules/       - modules (with category subfolders)"
+    echo "  ~/osint_framework/logs/          - logs (optional)"
+    echo "  ~/osint_framework/results/       - timestamped results folders"
+    echo
+    echo "Module generator (osint_module_gen):"
+    echo "  osint_module_gen <name> [category]"
+    echo "    - creates a new module file with init/run/cleanup functions"
+    echo "    - places it under the chosen category subdirectory"
+    echo "    - example: osint_module_gen reports logging"
+    echo
+    echo "Notes:"
+    echo "  - Modules are loaded via load_module <name>."
+    echo "  - The loader searches both modules/ and its category subfolders."
+}
+
+~/osint_framework/modules/logging_tools.sh
+
+# logging_tools module
+logging_tools() {
+    TS=$(date +%Y-%m-%d_%H-%M-%S)
+    OUTDIR="$HOME/osint_framework/results/$TS"
+    mkdir -p "$OUTDIR"
+
+    echo "[logging_tools] Created results directory: $OUTDIR"
+    echo "[logging_tools] You can save your module output into this folder."
+}
+
+~/osint_framework/modules/sync_tools.sh
+
+# sync_tools module
+sync_tools() {
+    echo "[sync_tools] Starting sync engine..."
+
+    SYNC_SRC="$HOME/osint_framework/results"
+    SYNC_DST="$HOME/osint_framework/sync_out"
+
+    mkdir -p "$SYNC_DST"
+
+    echo "[sync_tools] Copying new results to sync_out..."
+    cp -r "$SYNC_SRC"/* "$SYNC_DST" 2>/dev/null
+
+    echo "[sync_tools] Local sync complete."
+    echo "[sync_tools] If you want cross-device sync, copy sync_out to your second phone manually or via cloud storage."
+}
+
+case "$TARGET" in
+    help|--help)
+        load_module help_menu
+        help_menu
+        exit 0
+        ;;
+    new_module)
+        if command -v osint_module_gen >/dev/null 2>&1; then
+            osint_module_gen $EXTRA_ARGS
+        else
+            echo "osint_module_gen not found in PATH."
+        fi
+        exit 0
+        ;;
+    *)
+        ;;
+esac
+
+osint_launcher new_module reports logging
+
+mkdir -p ~/osint_framework/modules/{core,email,phone,domain,cloudflare,sync,logging,misc}
+mkdir -p ~/osint_framework/logs ~/osint_framework/results ~/bin
+
+~/osint_framework/
+~/osint_framework/modules/
+~/osint_framework/results/
+~/osint_framework/logs/
+~/bin/
+
+~/bin/osint_launcher
+~/bin/osint_module_gen
+~/osint_framework/modules/help_menu.sh
+~/osint_framework/modules/logging_tools.sh
+~/osint_framework/modules/sync_tools.sh
+
+osint_launcher help
+osint_launcher <target>
+osint_launcher new_module <name> [category]
+
+~/bin/osint_launcher
+~/bin/osint_module_gen
+~/osint_framework/modules/*.sh
+
+osint_launcher help
+
+cliffnotes.txt

@@ -1,0 +1,35 @@
+wtf 
+/data/data/com.termux/files/home/.npm/_logs/2026-01-18T10_45_25_325Z-debug-0.log
+/data/data/com.termux/files/home/.npm/_logs/2026-01-18T10_46_59_060Z-debug-0.log
+/data/data/com.termux/files/home/.cpan/CPAN/MyConfig.pm
+/data/data/com.termux/files/home/syntax_errors.log
+/data/data/com.termux/files/home/misc/report_20260225_0808.txt
+/data/data/com.termux/files/home/misc/termux_report.txt
+Paths needing review saved to: /data/data/com.termux/files/home/files_to_fix.txt
+
+[4/4] Checking for empty scripts...
+
+------------------------------------------------
+✨ Audit Complete!
+Run: cat /data/data/com.termux/files/home/files_to_fix.txt | ~/bin/fix_paths.sh
+~/Tools/FAFO-Engine_working $ sed -i '266s/;;/;;
+                    ;;/' ~/Tools/FAFO-Engine/FAFO.sh
+/data/data/com.termux/files/usr/bin/sed: -e expression #1, char 10: unterminated `s' command
+~/Tools/FAFO-Engine_working $ find ~/Osint -name "test.sh" -exec sed -i 's/^else/fi
+else/' {} ;
+find: missing argument to `-exec'
+~/Tools/FAFO-Engine_working $ rm ~/storage/podcasts ~/storage/audiobooks
+termux-setup-storage
+
+It appears that directory '~/storage' already exists.
+This script is going to rebuild its structure from
+scratch, wiping all dangling files. The actual storage
+content IS NOT going to be deleted.
+
+Do you want to continue? (y/n) y
+~/Tools/FAFO-Engine_working $ find "$HOME" -name "*.sh" -o -name "*.py" -o -name "*.js" -exec chmod +x {} +
+~/Tools/FAFO-Engine_working $ cd ~/Tools/FAFO-Engine_working && ./fafo-repair.sh
+bash: ./fafo-repair.sh: No such file or directory
+~/Tools/FAFO-Engine_working $ cd ~/Tools/FAFO-Engine_working && ./fafo-repair.sh
+bash: ./fafo-repair.sh: No such file or directory
+~/Tools/FAFO-Engine_working $

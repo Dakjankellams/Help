@@ -1,0 +1,66 @@
+.
+├── 0001 text
+├── Screenshot_20260227-043212_Chrome.png
+├── Screenshot_20260227-045006_Chrome.png
+├── Screenshot_20260227-045402_Chrome.png
+├── Screenshot_20260227-045435_Chrome.png
+├── Screenshot_20260227-045509_Chrome.png
+├── Screenshot_20260227-045536_Chrome.png
+├── Screenshot_20260227-045626_Chrome.png
+├── Screenshot_20260227-045708_Chrome.png
+├── Screenshot_20260227-045817_Chrome.png
+├── Screenshot_20260227-045904_Chrome.png
+├── Screenshot_20260227-045930_Chrome.png
+├── Screenshot_20260227-050009_Chrome.png
+├── Screenshot_20260227-050045_Chrome.png
+├── Screenshot_20260227-050156_Chrome.png
+├── Screenshot_20260227-050240_Chrome.png
+├── Screenshot_20260227-050415_Chrome.png
+├── Screenshot_20260227-050704_Chrome.png
+├── Screenshot_20260227-050912_Chrome.png
+├── Screenshot_20260227-050957_Chrome.png
+├── Screenshot_20260227-052348_Chrome.png
+├── Screenshot_20260227-052717_Chrome.png
+├── Screenshot_20260227-052813_Chrome.png
+├── Screenshot_20260227-053158_Chrome.png
+├── Screenshot_20260227-053204_Chrome.png
+├── Screenshot_20260227-053400_Chrome.png
+├── Screenshot_20260227-053428_Chrome.png
+├── Screenshot_20260227-090604_Poe.png
+├── Screenshot_20260227-090609_Poe.png
+├── Screenshot_20260227-090614_Poe.png
+├── Screenshot_20260227-090840_Poe.png
+├── Screenshot_20260227-091018_Poe.png
+├── Screenshot_20260227-091022_Poe.png
+├── Screenshot_20260227-091026_Poe.png
+├── Screenshot_20260227-091040_Poe.png
+├── System UI shared link.url
+├── System UI shared text (10).txt
+├── System UI shared text (11).txt
+├── System UI shared text (12).txt
+├── System UI shared text (14).txt
+├── System UI shared text (15).txt
+├── System UI shared text (16).txt
+├── System UI shared text (19).txt
+├── System UI shared text (2).txt
+├── System UI shared text (20).txt
+├── System UI shared text (21).txt
+├── System UI shared text (22).txt
+├── System UI shared text (24).txt
+├── System UI shared text (25).txt
+├── System UI shared text (28).txt
+├── System UI shared text (31).txt
+├── System UI shared text (4).txt
+├── System UI shared text (5).txt
+├── System UI shared text (6).txt
+├── System UI shared text (7).txt
+├── System UI shared text (8).txt
+├── System UI shared text (9).txt
+├── System UI shared text.txt
+├── Tool Path Script - Poe.pdf
+├── copilot_index.txt
+├── help.pdf
+├── helpp.txt
+└── output.txt
+
+1 directory, 63 files

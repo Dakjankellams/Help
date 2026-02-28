@@ -1,0 +1,26 @@
+./System UI shared text (10).txt
+./System UI shared text (11).txt
+./System UI shared text (12).txt
+./System UI shared text (14).txt
+./System UI shared text (15).txt
+./System UI shared text (16).txt
+./System UI shared text (19).txt
+./System UI shared text (2).txt
+./System UI shared text (20).txt
+./System UI shared text (21).txt
+./System UI shared text (22).txt
+./System UI shared text (24).txt
+./System UI shared text (25).txt
+./System UI shared text (28).txt
+./System UI shared text (31).txt
+./System UI shared text (4).txt
+./System UI shared text (5).txt
+./System UI shared text (6).txt
+./System UI shared text (7).txt
+./System UI shared text (8).txt
+./System UI shared text (9).txt
+./System UI shared text.txt
+./chunk_list.txt
+./copilot_index.txt
+./helpp.txt
+./output.txt
